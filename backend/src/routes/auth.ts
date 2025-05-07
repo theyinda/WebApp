@@ -4,9 +4,6 @@ import { Router } from 'express';
 
 const router = Router();
 
-// const router = express.Router();
-
-
 
 router.post('/register', register as any);
 router.post('/login', login as any);

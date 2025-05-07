@@ -40,8 +40,7 @@ export const getAllOrders = async (_req: Request, res: Response) => {
 // Update Order (Admin only)
 export const updateOrder = async (req: Request, res: Response) => {
     const { id } = req.params;
-    const { productName, productCategory, price, orderDate } = req.body;
-
+    const { productName, productCategory, price, orderDate } = req.body
     const order = await prisma.order.update({
         where: { id },
         data: {
@@ -58,7 +57,6 @@ export const updateOrder = async (req: Request, res: Response) => {
 // Delete Order (Admin only)
 export const deleteOrder = async (req: Request, res: Response) => {
     const { id } = req.params;
-
     await prisma.order.delete({ where: { id } });
 
     return res.status(204).send();
