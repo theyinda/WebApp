@@ -6,10 +6,23 @@ import orderRoutes from './routes/order';
 import analyticsRoutes from './routes/analytics';
 import { v4 as uuidv4 } from 'uuid';
 
+
 dotenv.config();
 const app = express();
+const allowedOrigins = ["http://localhost:3001", "https://your-live-site.com"];
 
-app.use(cors());
+app.use(cors({
+    origin: (origin, callback) => {
+        if (allowedOrigins.includes(origin!)) {
+            callback(null, true);
+        } else {
+            callback(new Error("Not allowed by CORS"));
+        }
+    },
+    credentials: true,
+}));
+
+
 app.use(express.json());
 const randomString = uuidv4();
 console.log(randomString);

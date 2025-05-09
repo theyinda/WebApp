@@ -3511,7 +3511,7 @@ export namespace Prisma {
     name: string
     email: string
     password: string
-    role: $Enums.Role
+    role?: $Enums.Role
     createdAt?: Date | string
     updatedAt?: Date | string
     orders?: OrderCreateNestedManyWithoutCustomerInput
@@ -3522,7 +3522,7 @@ export namespace Prisma {
     name: string
     email: string
     password: string
-    role: $Enums.Role
+    role?: $Enums.Role
     createdAt?: Date | string
     updatedAt?: Date | string
     orders?: OrderUncheckedCreateNestedManyWithoutCustomerInput
@@ -3555,7 +3555,7 @@ export namespace Prisma {
     name: string
     email: string
     password: string
-    role: $Enums.Role
+    role?: $Enums.Role
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -4096,7 +4096,7 @@ export namespace Prisma {
     name: string
     email: string
     password: string
-    role: $Enums.Role
+    role?: $Enums.Role
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -4106,7 +4106,7 @@ export namespace Prisma {
     name: string
     email: string
     password: string
-    role: $Enums.Role
+    role?: $Enums.Role
     createdAt?: Date | string
     updatedAt?: Date | string
   }
