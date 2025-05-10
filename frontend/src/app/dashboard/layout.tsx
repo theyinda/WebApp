@@ -22,6 +22,7 @@ export default function DashboardRouteLayout({
 }) {
     const router = useRouter();
     const pathname = usePathname();
+    const API = process.env.NEXT_PUBLIC_API_BASE_URL;
     // const [profileOpen, setProfileOpen] = useState(false);
     // const [mobileNav, setMobileNav] = useState(0);
 
@@ -63,9 +64,30 @@ export default function DashboardRouteLayout({
     // };
 
     const handleLogout = async () => {
-        await fetch("/api/auth/logout");
-        router.push("/");
+        console.log('logout')
+        try {
+            const response = await fetch(`${API}/auth/logout`, {
+                method: 'POST',
+                credentials: 'include', // important to send cookies
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+
+            if (response.ok) {
+                // Optionally remove frontend stored state (e.g., Redux, Context, localStorage)
+                localStorage.removeItem('user');
+                // window.location.href = '/login'; // Redirect to login page
+                router.push("/");
+            } else {
+                console.error('Logout failed:', await response.json());
+            }
+        } catch (error) {
+            console.error('Logout error:', error);
+        }
     };
+
+
     return (
         <Box sx={{ display: "flex" }}>
             <Drawer

@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useState } from "react";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
@@ -50,16 +52,19 @@ const Login = () => {
             if (res.ok) {
                 const data = await res.json();
                 dispatch(setUser(data.user));
+                localStorage.setItem('user', JSON.stringify(data.user));
+                console.log('User stored in localStorage:', localStorage.getItem('user'));
                 SuccessHandler({
                     message: "Login successful!",
                 });
                 console.log(data, 'data')
+                router.push("/dashboard");
 
-                if (data.user.role === "ADMIN") {
-                    router.push("/dashboard/admin");
-                } else {
-                    router.push("/dashboard/customer");
-                }
+                // if (data.user.role === "ADMIN") {
+                //     router.push("/dashboard/admin");
+                // } else {
+                //     router.push("/dashboard/customer");
+                // }
             } else if (res.status === 401) {
                 ErrorHandler({
                     message: "User not found or Invalid credentials",

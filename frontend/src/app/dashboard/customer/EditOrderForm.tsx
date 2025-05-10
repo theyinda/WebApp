@@ -16,6 +16,7 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 interface OrderProp {
     openModal: boolean;
     handleModalClose: () => void;
+    selectedOrder: Order | null;
     setOpenModal: (openModal: boolean) => void;
     categories: {
         name?: string;
@@ -46,22 +47,25 @@ const validationSchema = Yup.object().shape({
     orderDate: Yup.string().required("Name is required"),
 });
 
-const OrderForm = ({ openModal, setOpenModal, handleModalClose, categories }: OrderProp) => {
+const OrderForm = ({ openModal, setOpenModal, handleModalClose, categories, selectedOrder }: OrderProp) => {
     const user = useSelector((state: RootState) => state.auth.user);
     console.log(user, user?.name, 'logged in user')
     const API = process.env.NEXT_PUBLIC_API_BASE_URL;
     const [loading, setLoading] = useState(false);
 
-
-    console.log(categories, 'categories')
-    const uniqueCategories = [...new Set(categories)];
+    console.log(categories, 'categories', categories.length, selectedOrder)
+    // const uniqueCategories = [...new Set(categories)];
+    const uniqueCategories = [
+        ...new Set(categories.map(item => item.productCategory))
+    ];
+    console.log(uniqueCategories, 'uniqueCategories', uniqueCategories.length)
 
     const handleOrder = async (values: Order) => {
         try {
             setLoading(true);
 
-            const res = await fetch(`${API}/orders`, {
-                method: "POST",
+            const res = await fetch(`${API}/orders/${selectedOrder?.id}`, {
+                method: "PATCH",
                 credentials: 'include',
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
@@ -86,17 +90,18 @@ const OrderForm = ({ openModal, setOpenModal, handleModalClose, categories }: Or
                 const errorData = await res.json();
                 console.log(errorData, 'error')
                 ErrorHandler({
-                    message: errorData.message || "Could not create order",
+                    message: errorData.message || "Could not update order.",
                 });
             }
         } catch (error) {
             console.error("Error:", error);
             console.log(error, 'error')
-            ErrorHandler({ message: "Could not create order." });
+            ErrorHandler({ message: "Could not update order" });
         } finally {
             setLoading(false);
         }
     };
+
     return (
         <Box>
 
@@ -124,7 +129,11 @@ const OrderForm = ({ openModal, setOpenModal, handleModalClose, categories }: Or
                     </Box>
 
                     <Formik
-                        initialValues={{ name: user?.name || "", productName: "", productCategory: "", price: "", orderDate: "" }}
+                        initialValues={{
+                            name: user?.name || "", productName: selectedOrder?.productName || "", productCategory: selectedOrder?.productCategory || "", price: selectedOrder?.price || "", orderDate: selectedOrder?.orderDate
+                                ? new Date(selectedOrder.orderDate).toISOString().split('T')[0]
+                                : ""
+                        }}
                         validationSchema={validationSchema}
                         onSubmit={(values) => {
                             handleOrder(values);
@@ -197,7 +206,6 @@ const OrderForm = ({ openModal, setOpenModal, handleModalClose, categories }: Or
                                         <Select
                                             id="productCategory"
                                             name="productCategory"
-                                            // value={formData.activityLevel}
                                             onChange={formik.handleChange}
                                             displayEmpty
                                             sx={{
@@ -219,14 +227,14 @@ const OrderForm = ({ openModal, setOpenModal, handleModalClose, categories }: Or
                                                 },
                                             }}
                                         >
-                                            {uniqueCategories?.map((product) => (
+                                            {categories?.map((product) => (
                                                 <MenuItem
-                                                    key={product.name}
+                                                    key={product.productName}
                                                     sx={{
                                                         fontFamily: "poppins",
                                                         color: "#4B5563",
                                                     }}
-                                                    value={product.productCategory}
+                                                    value={'Fragrance'}
                                                 >
                                                     {product.productCategory}
                                                 </MenuItem>
@@ -311,7 +319,7 @@ const OrderForm = ({ openModal, setOpenModal, handleModalClose, categories }: Or
                                             width: '100%',
                                             textTransform: 'none'
                                         }}>
-                                            Create an Order
+                                            Update Order
                                         </Button>
                                         <Button variant="outlined" onClick={handleModalClose} sx={{
                                             fontWeight: 500,

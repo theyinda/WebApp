@@ -19,7 +19,14 @@ export const register = async (req: Request, res: Response): Promise<Response> =
         });
 
         const token = generateToken(user.id, user.role);
-        return res.status(201).json({ token, user: { id: user.id, name: user.name, email: user.email, role: user.role } });
+        // Set cookie
+        res.cookie('token', token, {
+            httpOnly: true,        // ✅ prevents JS access
+            secure: process.env.NODE_ENV === 'production' ? true : false, // ✅ dynamic
+            sameSite: 'lax', // 'lax' works better locally
+            maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+        });
+        return res.status(201).json({ user: { id: user.id, name: user.name, email: user.email, role: user.role } });
     } catch (error) {
         console.error(error);
         return res.status(500).json({ message: 'Server error' });
@@ -39,10 +46,31 @@ export const login = async (req: Request, res: Response): Promise<Response> => {
             return res.status(400).json({ message: 'Invalid credentials' });
         }
 
+
         const token = generateToken(user.id, user.role);
+        // Set cookie
+        res.cookie('token', token, {
+            httpOnly: true,        // ✅ prevents JS access
+            secure: process.env.NODE_ENV === 'production' ? true : false, // ✅ dynamic
+            sameSite: 'lax', // 'lax' works better locally
+            maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+        });
         return res.status(201).json({ token, user: { id: user.id, name: user.name, email: user.email, role: user.role } });
     } catch (error) {
         console.error(error);
         return res.status(500).json({ message: 'Server error' });
+    }
+};
+export const logout = async (req: Request, res: Response): Promise<Response> => {
+    try {
+        res.clearCookie('token', {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production' ? true : false,
+            sameSite: 'lax',
+        });
+        return res.status(200).json({ message: 'Logged out successfully' });
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ message: 'Error during logout' });
     }
 };

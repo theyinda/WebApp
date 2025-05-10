@@ -1,42 +1,82 @@
 import { Request, Response } from 'express';
 import prisma from '../config/db';
+import { startOfMonth, endOfMonth, startOfYear, endOfYear, subMonths, subYears } from "date-fns";
 
 // Admin only
 // Total Revenue
-export const revenue = async (req: Request, res: Response) => {
+export const analytics = async (req: Request, res: Response) => {
     try {
-        const result = await prisma.order.aggregate({
+        const { range } = req.query; // e.g. "this_month", "last_month", etc.
+
+        let startDate: Date | undefined;
+        let endDate: Date | undefined;
+
+        const now = new Date();
+
+        // Set date range based on filter
+        switch (range) {
+            case "this_month":
+                startDate = startOfMonth(now);
+                endDate = endOfMonth(now);
+                break;
+            case "last_month":
+                const lastMonth = subMonths(now, 1);
+                startDate = startOfMonth(lastMonth);
+                endDate = endOfMonth(lastMonth);
+                break;
+            case "this_year":
+                startDate = startOfYear(now);
+                endDate = endOfYear(now);
+                break;
+            case "last_year":
+                const lastYear = subYears(now, 1);
+                startDate = startOfYear(lastYear);
+                endDate = endOfYear(lastYear);
+                break;
+            default:
+                // If no filter or unknown filter, return all-time data
+                startDate = undefined;
+                endDate = undefined;
+        }
+
+        // Build the filter for Prisma query
+        const dateFilter = startDate && endDate ? {
+            createdAt: {
+                gte: startDate,
+                lte: endDate
+            }
+        } : {};
+
+        // Revenue
+        const revenue = await prisma.order.aggregate({
             _sum: {
                 price: true,
             },
+            where: dateFilter
         });
-        res.json({ totalRevenue: result._sum.price || 0 });
-    } catch (error) {
-        res.status(500).json({ error: 'Error fetching revenue' });
-    }
-};
 
-// Order Count
-export const orders = async (req: Request, res: Response) => {
-    try {
-        const count = await prisma.order.count();
-        res.json({ orderCount: count });
-    } catch (error) {
-        res.status(500).json({ error: 'Error fetching order count' });
-    }
-};
-// Unique Customer Count
-export const customer = async (req: Request, res: Response) => {
-    try {
-        const count = await prisma.order.findMany({
+        // Orders Count
+        const orderCount = await prisma.order.count({
+            where: dateFilter
+        });
+
+        // Unique Customers
+        const customers = await prisma.order.findMany({
+            where: dateFilter,
             select: {
                 customerId: true,
             },
             distinct: ['customerId'],
         });
 
-        res.json({ customerCount: count.length });
+        res.json({
+            totalRevenue: revenue._sum.price || 0,
+            orderCount,
+            customerCount: customers.length
+        });
+
     } catch (error) {
-        res.status(500).json({ error: 'Error fetching customer count' });
+        console.error("Error in analytics:", error);
+        res.status(500).json({ error: "Error fetching analytics data" });
     }
-};
+}

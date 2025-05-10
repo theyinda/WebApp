@@ -5,6 +5,9 @@ import "@/styles/global.css";
 import { Provider } from 'react-redux';
 import store from '@/redux/store';
 import { Toaster } from "react-hot-toast";
+import { LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import ReduxInit from "./ReduxInit";
 // import { usePathname } from "next/navigation";
 
 // const pathname = usePathname();
@@ -32,14 +35,17 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+
+
   return (
     <html className={`${montserrat.variable} ${poppins.variable}`} lang="en">
       <body>
         <Provider store={store}>
-          <Toaster />
-          {/* {!isDashboardRoute && <Header />} */}
-          <main>{children}</main>
-          {/* {!isDashboardRoute && <Footer />} */}
+          <LocalizationProvider dateAdapter={AdapterDateFns}>
+            <ReduxInit />
+            <Toaster />
+            <main>{children}</main>
+          </LocalizationProvider>
         </Provider>
       </body>
     </html>

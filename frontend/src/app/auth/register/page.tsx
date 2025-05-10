@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useState } from "react";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
@@ -77,12 +79,12 @@ const Register = () => {
                     message: "Registration successful!",
                 });
                 console.log(data, 'data')
-
-                if (data.user.role === "ADMIN") {
-                    router.push("/dashboard/admin");
-                } else {
-                    router.push("/dashboard/customer");
-                }
+                router.push("/dashboard");
+                // if (data.user.role === "ADMIN") {
+                //     router.push("/dashboard/admin");
+                // } else {
+                //     router.push("/dashboard/customer");
+                // }
             } else {
                 const errorData = await res.json();
                 console.log(errorData, 'error')

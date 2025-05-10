@@ -1,139 +1,76 @@
 
 "use client";
-import { LocationOn, NotificationsOutlined } from "@mui/icons-material";
-import { Box, Typography } from "@mui/material";
-import React from "react";
-
-// import { formatTime } from "@/utils/time";
-
+import { Box } from "@mui/material";
+import React, { useEffect, useState } from "react";
+import AdminDashboard from "./admin/page";
+import CustomerDashboard from "./customer/page";
+import { Order } from "@/interfaces/order";
+import { ErrorHandler } from "@/helper/Handler";
 import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
 
 
 const Dashboard = () => {
 
+    const API = process.env.NEXT_PUBLIC_API_BASE_URL;
+
+    const [orders, setOrders] = useState<Order[] | null>([])
+    const [totalOrders, setTotalOrders] = useState<Order[]>([])
+    const [loading, setLoading] = useState<boolean>(false)
 
     const user = useSelector((state: RootState) => state.auth.user)
+    console.log(user, 'userGod')
+    const userId = user?.id
 
 
-    const dymanicGreeting = () => {
-        const date = new Date();
-        const hours = date.getHours();
-        if (hours < 12) {
-            return "Good Morning";
-        } else if (hours < 17) {
-            return "Good Afternoon";
-        } else if (hours < 21) {
-            return "Good Evening";
-        } else {
-            return "Good Night";
+    // fetch order then filter out 
+    const fetchOrders = async () => {
+        try {
+            setLoading(true)
+            if (user?.id) {
+                const response = await fetch(`${API}/orders`, {
+                    method: 'GET',
+                    credentials: 'include',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                })
+                console.log(response, 'response')
+                const data = await response.json()
+                console.log(data?.data, 'data')
+                console.log(user?.id, 'userId')
+                // Filter out orders based on userId
+                const getUser = Array.isArray(data?.data)
+                    ? data?.data.filter((order: Order) => order?.customerId === userId)
+                    : [];
+                setTotalOrders(data?.data)
+                // console.log(totalOrders, 'totalOrderss')
+                setOrders(getUser); // Correctly set the filtered orders
+            }
+
+        } catch (error) {
+            console.log(error, 'error')
+            ErrorHandler({ message: "Error Fetching Orders" });
+        } finally {
+            setLoading(false)
         }
-    };
 
+    }
+
+    console.log(user, 'user-dashboard')
+
+
+    useEffect(() => {
+        fetchOrders()
+
+    }, [userId])
 
     return (
         <Box
             sx={{ padding: { xs: "1rem", lg: "3rem" }, backgroundColor: "#f3f4f670" }}
         >
-            <Box
-                sx={{
-                    display: "flex",
-                    flexDirection: "row",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                }}
-            >
-                <Box
-                    sx={{
-                        display: "flex",
-                        flexDirection: "row",
-                        gap: { xs: "0.5rem", lg: "1rem" },
-                        alignItems: "center",
-                    }}
-                >
-                    <Box
-                        component={"img"}
-                        src="/images/profile.png"
-                        alt="Profile picture"
-                        sx={{
-                            border: "3px solid #F97316",
-                            borderRadius: "50%",
-                            padding: 0,
-                            width: { xs: "60px", lg: "80px" },
-                            height: { xs: "60px", lg: "80px" },
-                        }}
-                    />
-                    <Box>
-                        <Box
-                            sx={{
-                                display: "flex",
-                                alignItems: "center",
-                                flexDirection: "row",
-                                gap: { xs: "0.2rem", lg: "0.5rem" },
-                            }}
-                        >
-                            <Typography
-                                sx={{
-                                    fontSize: { xs: "1rem", lg: "1.2rem" },
-                                    fontFamily: "Montserrat",
-                                }}
-                            >
-                                {`${dymanicGreeting()}, ${user?.name || ""}! 👋`}
-                            </Typography>
-                        </Box>
-                        <Box
-                            sx={{
-                                display: "flex",
-                                alignItems: "center",
-                                flexDirection: "row",
-                                gap: { xs: "0.2rem", lg: "0.5rem" },
-                            }}
-                        >
-                            <LocationOn sx={{ color: " #F97316" }} />
 
-                        </Box>
-                    </Box>
-                </Box>
-                <NotificationsOutlined
-                    sx={{ color: "#4B5563", fontSize: { xs: "2rem", lg: "2.25rem" } }}
-                />
-            </Box>
-            <Box sx={{ marginTop: "2rem" }}>
-                <Box
-                    sx={{
-                        display: "flex",
-                        flexDirection: "row",
-                        justifyContent: "space-between",
-                        alignItems: "center",
-                    }}
-                >
-                    <Typography
-                        sx={{
-                            fontSize: { xs: "1.2rem", lg: "1.5rem" },
-                            fontWeight: 600,
-                            fontFamily: "Montserrat",
-                        }}
-                    >
-                        Recommended Meals
-                    </Typography>
-
-                </Box>
-
-
-            </Box>
-            <Box sx={{ marginTop: "2rem" }}>
-                <Typography
-                    sx={{
-                        fontSize: { xs: "1.2rem", lg: "1.5rem" },
-                        fontWeight: 600,
-                        fontFamily: "Montserrat",
-                    }}
-                >
-                    Next Meal
-                </Typography>
-
-            </Box>
-
+            {user?.role === 'ADMIN' ? (<AdminDashboard loading={loading} totalOrders={totalOrders || []} />) : (<CustomerDashboard orders={orders || []} loading={loading} totalOrders={totalOrders} />)}
 
 
         </Box>

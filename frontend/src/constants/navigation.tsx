@@ -7,8 +7,8 @@ export const DashboardNav = [
         title: "Overview",
         route: "/dashboard/customer",
         icon: {
-            default: <Image src="/sales.png" alt="Overview" width={24} height={24} />,
-            active: <Image src="/sales.png" alt="Overview" width={24} height={24} style={{ color: "#F97316", background: '"#F97316"' }} />,
+            default: <Image src="/overview.png" alt="Overview" width={24} height={24} />,
+            active: <Image src="/overview.png" alt="Overview" width={24} height={24} style={{ color: "#F97316", background: '"#F97316"' }} />,
         },
     },
     {
