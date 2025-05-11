@@ -56,9 +56,11 @@ const OrderForm = ({ openModal, setOpenModal, handleModalClose, categories, sele
     console.log(categories, 'categories', categories.length, selectedOrder)
     // const uniqueCategories = [...new Set(categories)];
     const uniqueCategories = [
-        ...new Set(categories.map(item => item.productCategory))
+        ...new Map(
+            categories.map(item => [item.productCategory, { id: item.id, productCategory: item.productCategory }])
+        ).values()
     ];
-    console.log(uniqueCategories, 'uniqueCategories', uniqueCategories.length)
+    console.log(uniqueCategories, 'uniqueCategories', uniqueCategories.length, selectedOrder)
 
     const handleOrder = async (values: Order) => {
         try {
@@ -208,6 +210,7 @@ const OrderForm = ({ openModal, setOpenModal, handleModalClose, categories, sele
                                             name="productCategory"
                                             onChange={formik.handleChange}
                                             displayEmpty
+                                            value={formik.values.productCategory}
                                             sx={{
                                                 fontFamily: "poppins",
                                                 color: "#4B5563",
@@ -227,16 +230,17 @@ const OrderForm = ({ openModal, setOpenModal, handleModalClose, categories, sele
                                                 },
                                             }}
                                         >
-                                            {categories?.map((product) => (
+
+                                            {uniqueCategories?.map((product) => (
                                                 <MenuItem
-                                                    key={product.productName}
+                                                    key={product.id}
                                                     sx={{
                                                         fontFamily: "poppins",
                                                         color: "#4B5563",
                                                     }}
-                                                    value={'Fragrance'}
+                                                    value={product?.productCategory}
                                                 >
-                                                    {product.productCategory}
+                                                    {product?.productCategory}
                                                 </MenuItem>
                                             ))}
                                         </Select>
@@ -277,35 +281,32 @@ const OrderForm = ({ openModal, setOpenModal, handleModalClose, categories, sele
                                     >
                                         Order date
                                     </label>
-                                    {/* <Input
-                                        name="orderDate"
-                                        type="text"
-                                        placeholder="Date"
-                                        onChange={formik.handleChange}
-                                        sx={{
 
-                                            "& .MuiInputBase-input": {
-                                                padding: '7px',
-                                            },
-                                        }}
-                                    /> */}
                                     <DatePicker
-                                        label="Order date"
-                                        value={formik.values.orderDate}
+                                        label=""
+                                        value={formik.values.orderDate ? new Date(formik.values.orderDate) : null}
+
                                         onChange={(value) => {
                                             formik.setFieldValue("orderDate", value);
                                         }}
-                                        renderInput={(params) => (
-                                            <Input
-                                                {...params}
-                                                name="orderDate"
-                                                sx={{
+                                        slotProps={{
+                                            textField: {
+                                                sx: {
                                                     "& .MuiInputBase-input": {
-                                                        padding: "7px",
+                                                        padding: "6px 10px !important", // Adjust vertical and horizontal padding
                                                     },
-                                                }}
-                                            />
-                                        )}
+                                                    "& .MuiPickersSectionList-root": {
+                                                        padding: "7px 8px", // Customize as needed
+                                                    },
+                                                    "& .MuiOutlinedInput-root": {
+                                                        borderRadius: "8px", // Optional: adjust border radius
+                                                    },
+                                                },
+                                            },
+                                        }}
+
+
+
                                     />
 
                                     <Box style={{ marginTop: "20px", display: "flex", justifyContent: "space-between", alignItems: 'center', gap: "2rem", }}>

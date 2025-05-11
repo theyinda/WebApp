@@ -267,20 +267,9 @@ const OrderForm = ({ openModal, setOpenModal, handleModalClose, categories }: Or
                                             color: "#777980",
                                         }}
                                     >
-                                        Order date
+                                        Order Date
                                     </label>
-                                    {/* <Input
-                                        name="orderDate"
-                                        type="text"
-                                        placeholder="Date"
-                                        onChange={formik.handleChange}
-                                        sx={{
 
-                                            "& .MuiInputBase-input": {
-                                                padding: '7px',
-                                            },
-                                        }}
-                                    /> */}
                                     <DatePicker
                                         label="Order date"
                                         value={formik.values.orderDate}

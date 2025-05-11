@@ -5,8 +5,14 @@ import { startOfMonth, endOfMonth, startOfYear, endOfYear, subMonths, subYears }
 // Admin only
 // Total Revenue
 export const analytics = async (req: Request, res: Response) => {
+    // const PORT = process.env.PORT || 8000;
+    const token = req.cookies.token;
+
+    console.log(token, 'token get orders')
+
+    if (!token) return res.status(401).json({ message: 'Unauthorized' });
     try {
-        const { range } = req.query; // e.g. "this_month", "last_month", etc.
+        const { range } = req.query;
 
         let startDate: Date | undefined;
         let endDate: Date | undefined;
@@ -61,12 +67,12 @@ export const analytics = async (req: Request, res: Response) => {
         });
 
         // Unique Customers
-        const customers = await prisma.order.findMany({
+        const customers = await prisma.user.findMany({
             where: dateFilter,
             select: {
-                customerId: true,
+                id: true,
             },
-            distinct: ['customerId'],
+            distinct: ['id'],
         });
 
         res.json({

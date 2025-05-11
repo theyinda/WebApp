@@ -24,14 +24,23 @@ interface InputProps {
 const StyledTextField = styled(TextField)(({ error }) => ({
 
     border: error ? 'none' : '1px solid #E0E2E7',
-    // borderRadius: '0.5rem',
+    borderRadius: '0.5rem',
     // maxWidth: '400px',
+    // "& .MuiOutlinedInput-root": {
+    //     borderRadius: '8px',
+    // },
+    // "& .MuiOutlinedInput-root": {
+    //     borderRadius: '8px',
+    // },
     "& .MuiInputBase-input": {
         fontWeight: 400,
         fontSize: '1rem',
         lineHeight: '1.5rem',
         letterSpacing: '0%',
         color: '#374151',
+    },
+    "& .MuiOutlinedInput-notchedOutline": {
+        border: 'none',
     },
     "&:hover .MuiOutlinedInput-notchedOutline": {
         borderColor: "#E0E2E7 !important",
@@ -56,6 +65,7 @@ const Input: React.FC<InputProps> = ({ label, ...props }) => {
                 {...field}
                 {...props}
                 label={label}
+                variant="outlined"
                 onChange={props.onChange}
                 disabled={props.disabled}
                 error={meta.touched && Boolean(meta.error)}

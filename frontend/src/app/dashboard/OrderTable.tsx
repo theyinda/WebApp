@@ -95,7 +95,7 @@ const OrderTable = ({ orders, loading }: OrderTableProps) => {
             ErrorHandler({ message: "Could not delete order" });
         }
     };
-    const sortedOrders = [...orders].sort((a, b) => {
+    const sortedOrders = [...orders]?.sort((a, b) => {
         const dateA = new Date(a.orderDate).getTime();
         const dateB = new Date(b.orderDate).getTime();
         return dateB - dateA;
@@ -152,7 +152,7 @@ const OrderTable = ({ orders, loading }: OrderTableProps) => {
                     {loading ? (
                         <TableRow>
                             <TableCell colSpan={7} align="center">
-                                <CircularProgress size={40} sx={{ color: "#F97316", my: 2 }} />
+                                <CircularProgress size={40} sx={{ color: "#2563EB", my: 2 }} />
                             </TableCell>
                         </TableRow>
                     ) : (

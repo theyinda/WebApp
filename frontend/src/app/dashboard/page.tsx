@@ -17,7 +17,7 @@ const Dashboard = () => {
     const [orders, setOrders] = useState<Order[] | null>([])
     const [totalOrders, setTotalOrders] = useState<Order[]>([])
     const [loading, setLoading] = useState<boolean>(false)
-
+    const [filter] = useState("this_year");
     const user = useSelector((state: RootState) => state.auth.user)
     console.log(user, 'userGod')
     const userId = user?.id
@@ -28,7 +28,7 @@ const Dashboard = () => {
         try {
             setLoading(true)
             if (user?.id) {
-                const response = await fetch(`${API}/orders`, {
+                const response = await fetch(`${API}/orders/?range=${filter}`, {
                     method: 'GET',
                     credentials: 'include',
                     headers: {
@@ -67,10 +67,10 @@ const Dashboard = () => {
 
     return (
         <Box
-            sx={{ padding: { xs: "1rem", lg: "3rem" }, backgroundColor: "#f3f4f670" }}
+            sx={{ padding: {}, backgroundColor: "" }}
         >
 
-            {user?.role === 'ADMIN' ? (<AdminDashboard loading={loading} totalOrders={totalOrders || []} />) : (<CustomerDashboard orders={orders || []} loading={loading} totalOrders={totalOrders} />)}
+            {user?.role === 'ADMIN' ? (<AdminDashboard loading={loading} />) : (<CustomerDashboard orders={orders || []} loading={loading} totalOrders={totalOrders} />)}
 
 
         </Box>
