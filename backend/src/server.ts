@@ -17,11 +17,6 @@ const app = express();
 const allowedOrigins = ["http://localhost:3001", "https://webapp-9idh.onrender.com", "https://web-app-tawny-pi.vercel.app"];
 
 
-app.use((req, res, next) => {
-    console.log("Incoming Origin:", req.headers.origin);
-    next();
-});
-
 app.use(cors({
     origin: (origin, callback) => {
         console.log("CORS Check Origin:", origin);
