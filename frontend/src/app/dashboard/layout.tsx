@@ -66,7 +66,7 @@ export default function DashboardRouteLayout({
     const handleLogout = async () => {
         console.log('logout')
         try {
-            const response = await fetch(`${API}/auth/logout`, {
+            const response = await fetch(`${API}/api/auth/logout`, {
                 method: 'POST',
                 credentials: 'include', // important to send cookies
                 headers: {

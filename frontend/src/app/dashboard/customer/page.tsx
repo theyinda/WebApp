@@ -40,7 +40,7 @@ const CustomerDashboard = () => {
         try {
             setLoading(true)
             if (user?.id) {
-                const response = await fetch(`${API}/orders/?range=${filter}`, {
+                const response = await fetch(`${API}/api/orders/?range=${filter}`, {
                     method: 'GET',
                     credentials: 'include',
                     headers: {

@@ -66,7 +66,7 @@ const EditOrderForm = ({ openModal, setOpenModal, handleModalClose, categories, 
         try {
             setLoading(true);
 
-            const res = await fetch(`${API}/orders/${selectedOrder?.id}`, {
+            const res = await fetch(`${API}/api/orders/${selectedOrder?.id}`, {
                 method: "PATCH",
                 credentials: 'include',
                 headers: { "Content-Type": "application/json" },

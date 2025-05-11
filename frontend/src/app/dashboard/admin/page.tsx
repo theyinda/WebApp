@@ -34,8 +34,8 @@ const AdminDashboard = () => {
             setLoading(true)
             try {
                 const [metricsRes, ordersRes] = await Promise.all([
-                    fetch(`${API}/analytics/?range=${filter}`, { credentials: "include" }),
-                    fetch(`${API}/orders/?range=${filter}`, { credentials: "include" }),
+                    fetch(`${API}/api/analytics/?range=${filter}`, { credentials: "include" }),
+                    fetch(`${API}/api/orders/?range=${filter}`, { credentials: "include" }),
                 ]);
 
                 const metricsData = await metricsRes.json();
@@ -79,7 +79,7 @@ const AdminDashboard = () => {
     // useEffect(() => {
     //     const fetchMetrics = async () => {
     //         try {
-    //             const response = await fetch(`${API}/analytics/?range=${filter}`, {
+    //             const response = await fetch(`${API}/api/analytics/?range=${filter}`, {
     //                 credentials: "include",
     //             });
     //             const data = await response.json();

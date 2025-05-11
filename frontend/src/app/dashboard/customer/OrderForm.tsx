@@ -60,7 +60,7 @@ const OrderForm = ({ openModal, setOpenModal, handleModalClose, categories }: Or
         try {
             setLoading(true);
 
-            const res = await fetch(`${API}/orders`, {
+            const res = await fetch(`${API}/api/orders`, {
                 method: "POST",
                 credentials: 'include',
                 headers: { "Content-Type": "application/json" },

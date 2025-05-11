@@ -65,7 +65,7 @@ const OrderTable = ({ orders, loading }: OrderTableProps) => {
         try {
 
 
-            const res = await fetch(`${API}/orders/${selectedOrder?.id}`, {
+            const res = await fetch(`${API}/api/orders/${selectedOrder?.id}`, {
                 method: "DELETE",
                 credentials: 'include',
                 headers: { "Content-Type": "application/json" },
@@ -113,7 +113,7 @@ const OrderTable = ({ orders, loading }: OrderTableProps) => {
     useEffect(() => {
         const fetchCustomers = async () => {
             try {
-                const response = await fetch(`${API}/users`, {
+                const response = await fetch(`${API}/api/users`, {
                     credentials: "include",
                 });
                 const data = await response.json();
