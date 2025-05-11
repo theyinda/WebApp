@@ -24,6 +24,7 @@ app.use((req, res, next) => {
 
 app.use(cors({
     origin: (origin, callback) => {
+        console.log("CORS Check Origin:", origin);
         if (!origin || allowedOrigins.includes(origin)) {
             callback(null, true);
         } else {
