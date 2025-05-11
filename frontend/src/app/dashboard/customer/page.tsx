@@ -10,13 +10,13 @@ import OrderTable from "../OrderTable";
 import { formattedDate } from "@/helper/date";
 import { Order } from "@/interfaces/order";
 
-interface CustomerDashboard {
+interface CustomerDashboardProps {
     orders: Order[];
     loading: boolean;
     totalOrders: Order[]
 }
 
-const CustomerDashboard = ({ orders, loading, totalOrders }: CustomerDashboard) => {
+const CustomerDashboard = ({ orders, loading, totalOrders }: CustomerDashboardProps) => {
     const [openModal, setOpenModal] = useState(false);
 
     const handleModalClose = () => {

@@ -47,7 +47,7 @@ const validationSchema = Yup.object().shape({
     orderDate: Yup.string().required("Name is required"),
 });
 
-const OrderForm = ({ openModal, setOpenModal, handleModalClose, categories, selectedOrder }: OrderProp) => {
+const EditOrderForm = ({ openModal, setOpenModal, handleModalClose, categories, selectedOrder }: OrderProp) => {
     const user = useSelector((state: RootState) => state.auth.user);
     console.log(user, user?.name, 'logged in user')
     const API = process.env.NEXT_PUBLIC_API_BASE_URL;
@@ -351,4 +351,4 @@ const OrderForm = ({ openModal, setOpenModal, handleModalClose, categories, sele
     )
 }
 
-export default OrderForm
+export default EditOrderForm
