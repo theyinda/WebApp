@@ -14,7 +14,7 @@ import cookieParser from 'cookie-parser';
 
 dotenv.config();
 const app = express();
-const allowedOrigins = ["http://localhost:3001", "https://webapp-9idh.onrender.com"];
+const allowedOrigins = ["http://localhost:3001", "https://webapp-9idh.onrender.com", "https://web-app-tawny-pi.vercel.app"];
 
 app.use(cors({
     origin: (origin, callback) => {
