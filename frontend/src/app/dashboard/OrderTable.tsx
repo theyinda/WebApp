@@ -28,7 +28,7 @@ const OrderTable = ({ orders, loading }: OrderTableProps) => {
     const [page, setPage] = useState(0); // Track the current page
     const [rowsPerPage, setRowsPerPage] = useState(5); // Rows per page (adjust as needed)
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-    const [customers, setCustomers] = useState<any[]>([]);
+    const [customers, setCustomers] = useState([]);
     const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
     const [menuOpenId, setMenuOpenId] = useState<string | null>(null);
 

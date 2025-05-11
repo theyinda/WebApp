@@ -13,7 +13,7 @@ import {
     Tooltip,
     Legend,
 } from 'chart.js';
-import { useEffect, useRef, useState } from 'react';
+import { useRef } from 'react';
 
 import { Doughnut, Line, } from 'react-chartjs-2';
 
@@ -64,27 +64,26 @@ ChartJS.register(
 
 
 
-const centerTextPlugin = {
-    id: 'centerText',
-    beforeDraw: (chart) => {
-        const { width, height, ctx } = chart;
-        ctx.restore();
-        const fontSize = (height / 150).toFixed(2);
-        ctx.font = `bold ${fontSize * 16}px sans-serif`;
-        ctx.textAlign = 'center';
-        ctx.fillStyle = '#1E3A8A'; // blue color
-        ctx.fillText('Total Orders', width / 2, height / 2 - 10);
-        ctx.font = `bold ${fontSize * 18}px sans-serif`;
-        ctx.fillText('10,000', width / 2, height / 2 + 15);
-        ctx.save();
-    }
-};
+// const centerTextPlugin = {
+//     id: 'centerText',
+//     beforeDraw: (chart) => {
+//         const { width, height, ctx } = chart;
+//         ctx.restore();
+//         const fontSize = (height / 150).toFixed(2);
+//         ctx.font = `bold ${fontSize * 16}px sans-serif`;
+//         ctx.textAlign = 'center';
+//         ctx.fillStyle = '#1E3A8A'; // blue color
+//         ctx.fillText('Total Orders', width / 2, height / 2 - 10);
+//         ctx.font = `bold ${fontSize * 18}px sans-serif`;
+//         ctx.fillText('10,000', width / 2, height / 2 + 15);
+//         ctx.save();
+//     }
+// };
 
 
 export default function DashboardCharts({ data }) {
     const chartRef = useRef(null);
     // const [pieData, setPieData] = useState({});
-    const [total, setTotal] = useState(0);
     console.log(data, 'chart data')
 
     // const productCategories = data.map((item) => item.productCategory || []);
@@ -113,18 +112,18 @@ export default function DashboardCharts({ data }) {
 
 
         'godx oo')
-    const maxAmount = Math.max(...categoryPrices);
+    // const maxAmount = Math.max(...categoryPrices);
 
-    let FINAL_MAX_PRODUCT_PRICE: number;
-    if (maxAmount <= 10) {
-        FINAL_MAX_PRODUCT_PRICE = 12;
-    } else if (maxAmount <= 100) {
-        FINAL_MAX_PRODUCT_PRICE = maxAmount + 50;
-    } else if (maxAmount <= 1000) {
-        FINAL_MAX_PRODUCT_PRICE = maxAmount + 100;
-    } else {
-        FINAL_MAX_PRODUCT_PRICE = maxAmount + 200;
-    }
+    // let FINAL_MAX_PRODUCT_PRICE: number;
+    // if (maxAmount <= 10) {
+    //     FINAL_MAX_PRODUCT_PRICE = 12;
+    // } else if (maxAmount <= 100) {
+    //     FINAL_MAX_PRODUCT_PRICE = maxAmount + 50;
+    // } else if (maxAmount <= 1000) {
+    //     FINAL_MAX_PRODUCT_PRICE = maxAmount + 100;
+    // } else {
+    //     FINAL_MAX_PRODUCT_PRICE = maxAmount + 200;
+    // }
 
     function generateColors(count) {
         const colors = [];

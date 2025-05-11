@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { MenuItem, FormControl, Select, InputLabel } from "@mui/material";
+import { MenuItem, FormControl, Select } from "@mui/material";
 
 const FilterDropdown = ({ filter, setFilter }) => {
     return (
