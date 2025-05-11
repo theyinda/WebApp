@@ -10,7 +10,7 @@ import type { RootState } from '@/redux/store';
 import { ErrorHandler, SuccessHandler } from '@/helper/Handler';
 import { Order } from '@/interfaces/order';
 import { useSelector } from 'react-redux';
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+// import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 
 
 interface OrderProp {
@@ -269,9 +269,21 @@ const OrderForm = ({ openModal, setOpenModal, handleModalClose, categories }: Or
                                     >
                                         Order Date
                                     </label>
+                                    <Input
+                                        name="orderDate"
+                                        type="text"
+                                        placeholder="Order date"
+                                        onChange={formik.handleChange}
+                                        sx={{
 
-                                    <DatePicker
+                                            "& .MuiInputBase-input": {
+                                                padding: '7px',
+                                            },
+                                        }}
+                                    />
+                                    {/* <DatePicker
                                         label="Order date"
+                                        
                                         value={formik.values.orderDate}
                                         onChange={(value) => {
                                             formik.setFieldValue("orderDate", value);
@@ -287,7 +299,7 @@ const OrderForm = ({ openModal, setOpenModal, handleModalClose, categories }: Or
                                                 }}
                                             />
                                         )}
-                                    />
+                                    /> */}
 
                                     <Box style={{ marginTop: "20px", display: "flex", justifyContent: "space-between", alignItems: 'center', gap: "2rem", }}>
                                         <Button variant="contained" color="primary" type='submit' loading={loading} sx={{

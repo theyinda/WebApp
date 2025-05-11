@@ -57,7 +57,7 @@ const EditOrderForm = ({ openModal, setOpenModal, handleModalClose, categories, 
     // const uniqueCategories = [...new Set(categories)];
     const uniqueCategories = [
         ...new Map(
-            categories.map(item => [item.productCategory, { id: item.id, productCategory: item.productCategory }])
+            categories.map(item => [item.productCategory, { productCategory: item.productCategory }])
         ).values()
     ];
     console.log(uniqueCategories, 'uniqueCategories', uniqueCategories.length, selectedOrder)
@@ -233,7 +233,7 @@ const EditOrderForm = ({ openModal, setOpenModal, handleModalClose, categories, 
 
                                             {uniqueCategories?.map((product) => (
                                                 <MenuItem
-                                                    key={product.id}
+                                                    key={product.productCategory}
                                                     sx={{
                                                         fontFamily: "poppins",
                                                         color: "#4B5563",

@@ -103,7 +103,7 @@ export default function DashboardCharts({ data }) {
     });
     // 2. Extract unique categories and corresponding totals
     const uniqueCategories = Object.keys(categoryTotals);
-    const categoryPrices = Object.values(categoryTotals);
+    const categoryPrices = Object.values(categoryTotals).map(Number);
     console.log(categoryPrices, 'categoryPrices')
     const totalPrice = categoryPrices.reduce((acc, price) => acc + price, 0);
     console.log(totalPrice);
@@ -170,7 +170,7 @@ export default function DashboardCharts({ data }) {
             title: {
                 display: true,
                 text: 'Revenue over time',
-                align: 'start', // Align to the left
+                align: 'start' as const, // Align to the left
                 color: '#64748B', // Deep blue
                 font: {
                     size: 15,
@@ -284,8 +284,8 @@ export default function DashboardCharts({ data }) {
         plugins: {
             legend: {
                 display: false,
-                position: 'bottom',
-                align: 'end',
+                position: 'bottom' as const,
+                align: 'end' as const,
                 labels: {
                     color: '#1E3A8A',
                     font: {
@@ -296,7 +296,7 @@ export default function DashboardCharts({ data }) {
             title: {
                 display: true,
                 text: 'Orders by categories',
-                align: 'start',
+                align: 'start' as const,
                 color: '#64748B',
                 font: {
                     size: 15,
