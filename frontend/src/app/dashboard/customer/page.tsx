@@ -1,28 +1,81 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Box, Typography } from "@mui/material";
 import Image from "next/image";
 import { Button } from "@mui/material";
 import { useSelector } from "react-redux";
+import { ErrorHandler } from "@/helper/Handler";
 import { RootState } from "@/redux/store";
 import OrderForm from "./OrderForm";
 import OrderTable from "../OrderTable";
 import { formattedDate } from "@/helper/date";
 import { Order } from "@/interfaces/order";
 
-interface CustomerDashboardProps {
-    orders: Order[];
-    loading: boolean;
-    totalOrders: Order[]
-}
+// interface CustomerDashboardProps {
+//     orders: Order[];
+//     loading: boolean;
+//     totalOrders: Order[]
+// }
 
-const CustomerDashboard = ({ orders, loading, totalOrders }: CustomerDashboardProps) => {
+const CustomerDashboard = () => {
     const [openModal, setOpenModal] = useState(false);
+
+
+    const user = useSelector((state: RootState) => state.auth.user);
+    const API = process.env.NEXT_PUBLIC_API_BASE_URL;
+
+    const [orders, setOrders] = useState<Order[]>([])
+    const [totalOrders, setTotalOrders] = useState<Order[]>([])
+    const [loading, setLoading] = useState<boolean>(false)
+    const [filter] = useState("this_year");
+    console.log(user, 'userGod')
+    const userId = user?.id
 
     const handleModalClose = () => {
         setOpenModal(false);
     };
-    const user = useSelector((state: RootState) => state.auth.user);
+
+    const fetchOrders = async () => {
+        try {
+            setLoading(true)
+            if (user?.id) {
+                const response = await fetch(`${API}/orders/?range=${filter}`, {
+                    method: 'GET',
+                    credentials: 'include',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                })
+
+                const data = await response.json()
+                console.log(data?.data, 'data')
+                console.log(user?.id, 'userId')
+
+                const getUser = Array.isArray(data?.data)
+                    ? data?.data.filter((order: Order) => order?.customerId === userId)
+                    : [];
+                setTotalOrders(data?.data)
+
+                setOrders(getUser);
+            }
+
+        } catch (error) {
+            console.log(error, 'error')
+            ErrorHandler({ message: "Error Fetching Orders" });
+        } finally {
+            setLoading(false)
+        }
+
+    }
+
+    console.log(user, 'user-dashboard')
+
+
+    useEffect(() => {
+        fetchOrders()
+
+    }, [userId])
 
     return (
         <Box sx={{ padding: "0!important", margin: "0!imporant" }}>
