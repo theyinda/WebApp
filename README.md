@@ -82,7 +82,7 @@ Get, Create, update, Delete orders
 Fetch analytics: total revenue, order count, customer count
 
 6. Deployment
-   Hosted on [insert platform: e.g., Netlify for frontend, Render for backend].
+   Hosted on Vercel for Frontend, Render for Backend.
 
 All environment variables (like JWT secrets and DB URLs) are stored securely.
 
