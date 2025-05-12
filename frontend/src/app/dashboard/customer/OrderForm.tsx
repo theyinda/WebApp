@@ -10,7 +10,7 @@ import type { RootState } from '@/redux/store';
 import { ErrorHandler, SuccessHandler } from '@/helper/Handler';
 import { Order } from '@/interfaces/order';
 import { useSelector } from 'react-redux';
-// import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 
 
 interface OrderProp {
@@ -31,7 +31,7 @@ const modalStyle = {
     left: "50%",
     transform: "translate(-50%, -50%)",
     backgroundColor: "#fff",
-    boxShadow: '0px 4px 32px 0px #0000001F',
+    boxShadow: '#09122782',
     borderRadius: "8px",
     maxWidth: "488px",
     width: "100%",
@@ -39,11 +39,11 @@ const modalStyle = {
 
 
 const validationSchema = Yup.object().shape({
-    name: Yup.string().required("Name is required"),
-    productName: Yup.string().required("Name is required"),
-    productCategory: Yup.string().required("Name is required"),
-    price: Yup.string().required("Name is required"),
-    orderDate: Yup.string().required("Name is required"),
+    name: Yup.string().required("Customer Name is required"),
+    productName: Yup.string().required("Product Name is required"),
+    productCategory: Yup.string().required("Product Category is required"),
+    price: Yup.string().required("Price is required"),
+    orderDate: Yup.string().required("Order Date is required"),
 });
 
 const OrderForm = ({ openModal, setOpenModal, handleModalClose, categories }: OrderProp) => {
@@ -52,7 +52,11 @@ const OrderForm = ({ openModal, setOpenModal, handleModalClose, categories }: Or
     const [loading, setLoading] = useState(false);
 
 
-    const uniqueCategories = [...new Set(categories)];
+    const uniqueCategories = [
+        ...new Map(
+            categories.map(item => [item.productCategory, { productCategory: item.productCategory }])
+        ).values()
+    ];
 
     const handleOrder = async (values: Order) => {
         try {
@@ -195,7 +199,7 @@ const OrderForm = ({ openModal, setOpenModal, handleModalClose, categories }: Or
                                         <Select
                                             id="productCategory"
                                             name="productCategory"
-                                            // value={formData.activityLevel}
+                                            value={formik.values.productCategory}
                                             onChange={formik.handleChange}
                                             displayEmpty
                                             sx={{
@@ -219,14 +223,14 @@ const OrderForm = ({ openModal, setOpenModal, handleModalClose, categories }: Or
                                         >
                                             {uniqueCategories?.map((product) => (
                                                 <MenuItem
-                                                    key={product.name}
+                                                    key={product.productCategory}
                                                     sx={{
-                                                        fontFamily: "poppins",
+                                                        fontFamily: "Inter",
                                                         color: "#4B5563",
                                                     }}
-                                                    value={product.productCategory}
+                                                    value={product?.productCategory}
                                                 >
-                                                    {product.productCategory}
+                                                    {product?.productCategory}
                                                 </MenuItem>
                                             ))}
                                         </Select>
@@ -267,37 +271,33 @@ const OrderForm = ({ openModal, setOpenModal, handleModalClose, categories }: Or
                                     >
                                         Order Date
                                     </label>
-                                    <Input
-                                        name="orderDate"
-                                        type="text"
-                                        placeholder="Order date"
-                                        onChange={formik.handleChange}
-                                        sx={{
 
-                                            "& .MuiInputBase-input": {
-                                                padding: '7px',
-                                            },
-                                        }}
-                                    />
-                                    {/* <DatePicker
-                                        label="Order date"
-                                        
-                                        value={formik.values.orderDate}
+                                    <DatePicker
+                                        label=""
+                                        value={formik.values.orderDate ? new Date(formik.values.orderDate) : null}
+
                                         onChange={(value) => {
                                             formik.setFieldValue("orderDate", value);
                                         }}
-                                        renderInput={(params) => (
-                                            <Input
-                                                {...params}
-                                                name="orderDate"
-                                                sx={{
+                                        slotProps={{
+                                            textField: {
+                                                sx: {
                                                     "& .MuiInputBase-input": {
-                                                        padding: "7px",
+                                                        padding: "6px 10px !important",
                                                     },
-                                                }}
-                                            />
-                                        )}
-                                    /> */}
+                                                    "& .MuiPickersSectionList-root": {
+                                                        padding: "7px 8px",
+                                                    },
+                                                    "& .MuiOutlinedInput-root": {
+                                                        borderRadius: "8px",
+                                                    },
+                                                },
+                                            },
+                                        }}
+
+
+
+                                    />
 
                                     <Box style={{ marginTop: "20px", display: "flex", justifyContent: "space-between", alignItems: 'center', gap: "2rem", }}>
                                         <Button variant="contained" color="primary" type='submit' loading={loading} sx={{

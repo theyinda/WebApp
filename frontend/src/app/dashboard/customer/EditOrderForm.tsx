@@ -32,7 +32,7 @@ const modalStyle = {
     left: "50%",
     transform: "translate(-50%, -50%)",
     backgroundColor: "#fff",
-    boxShadow: '0px 4px 32px 0px #0000001F',
+    boxShadow: '#09122782',
     borderRadius: "8px",
     maxWidth: "488px",
     width: "100%",
@@ -40,11 +40,11 @@ const modalStyle = {
 
 
 const validationSchema = Yup.object().shape({
-    name: Yup.string().required("Name is required"),
-    productName: Yup.string().required("Name is required"),
-    productCategory: Yup.string().required("Name is required"),
-    price: Yup.string().required("Name is required"),
-    orderDate: Yup.string().required("Name is required"),
+    name: Yup.string().required("Customer Name is required"),
+    productName: Yup.string().required("Product Name is required"),
+    productCategory: Yup.string().required("Product Category is required"),
+    price: Yup.string().required("Price is required"),
+    orderDate: Yup.string().required("Order Date is required"),
 });
 
 const EditOrderForm = ({ openModal, setOpenModal, handleModalClose, categories, selectedOrder }: OrderProp) => {
@@ -232,7 +232,7 @@ const EditOrderForm = ({ openModal, setOpenModal, handleModalClose, categories, 
                                                 <MenuItem
                                                     key={product.productCategory}
                                                     sx={{
-                                                        fontFamily: "poppins",
+                                                        fontFamily: "Inter",
                                                         color: "#4B5563",
                                                     }}
                                                     value={product?.productCategory}

@@ -131,7 +131,7 @@ const AdminDashboard = () => {
                         margin: "2rem",
                     }}
                 >
-                    <DashboardCharts data={orders || []} />
+                    <DashboardCharts data={orders || []} loading={loading} />
                 </Box>
 
                 <Box

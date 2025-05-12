@@ -1,15 +1,6 @@
-# WebApp
+# TPT - WebApp
 
-// "email": "kemi@gmail.com",
-// "password": "password123" admin
-Akindele1@ test@gmail.com
-
-{
-"email": "testuser@example.com",
-"password": "password123"
-} customer
-
-A full-stack web app that allows two types of users — Admins and Customers — to interact with order data in different ways.
+A web app that allows two types of users — Admins and Customers — to interact with order data in different ways.
 
 Features
 
@@ -95,43 +86,13 @@ Fetch analytics: total revenue, order count, customer count
 
 All environment variables (like JWT secrets and DB URLs) are stored securely.
 
-Live demo link: [Insert link if available]
+Live demo link: https://web-app-tawny-pi.vercel.app/
 
 Admin Demo Credentials
 To test the admin dashboard without registering:
 
 ```sh
-  Email: kemi@gmail.com
-  Password: password123
+  Email: admin@gmail.com
+  Password: Password1@
 
 ```
-
-{
-"compilerOptions": {
-"target": "ES2017",
-"lib": ["dom", "dom.iterable", "esnext"],
-"allowJs": true,
-"skipLibCheck": true,
-"strict": true,
-"noEmit": true,
-"esModuleInterop": true,
-"module": "esnext",
-"moduleResolution": "bundler",
-"resolveJsonModule": true,
-"isolatedModules": true,
-"jsx": "preserve",
-"incremental": true,
-"plugins": [
-{
-"name": "next"
-}
-],
-"paths": {
-"@/_": ["./src/_"]
-}
-},
-"include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
-"exclude": ["node_modules"]
-}
-
- const categoryPrices = Object.values(categoryTotals);

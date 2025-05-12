@@ -27,8 +27,8 @@ const Header = () => {
                 <Box sx={{ display: "flex", gap: "1rem", alignItems: "center" }}>
                     <Image
                         src={"/notification.png"}
-                        width={16}
-                        height={18}
+                        width={24}
+                        height={24}
                         alt="notification"
                         style={{ width: "100%" }}
                     />
@@ -43,7 +43,7 @@ const Header = () => {
                     <Image
                         src={"/arrow.png"}
                         width={16}
-                        height={16}
+                        height={8}
                         alt="arrow"
                     />
                 </Box>

@@ -6,6 +6,7 @@ import {
     MenuItem,
     IconButton,
     TablePagination,
+    Typography,
 } from "@mui/material";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import {
@@ -16,8 +17,6 @@ import {
     TableRow,
     Checkbox,
 } from "@mui/material";
-// import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
-// import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
 import { Order } from "@/interfaces/order";
@@ -32,10 +31,10 @@ interface OrderTableProps {
 
 const OrderTable = ({ orders, loading }: OrderTableProps) => {
     const user = useSelector((state: RootState) => state.auth.user);
-    const [selectedRows, setSelectedRows] = useState<string[]>([]); // Track selected rows
-    const [openModal, setOpenModal] = useState(false); // Modal visibility state
-    const [page, setPage] = useState(0); // Track the current page
-    const [rowsPerPage, setRowsPerPage] = useState(5); // Rows per page (adjust as needed)
+    const [selectedRows, setSelectedRows] = useState<string[]>([]);
+    const [openModal, setOpenModal] = useState(false);
+    const [page, setPage] = useState(0);
+    const [rowsPerPage, setRowsPerPage] = useState(5);
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const [customers, setCustomers] = useState([]);
     const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
@@ -44,7 +43,7 @@ const OrderTable = ({ orders, loading }: OrderTableProps) => {
     const handleSelectAllRows = (event: React.ChangeEvent<HTMLInputElement>) => {
         if (event.target.checked) {
             const allIds = orders.map((order) => order.id);
-            setSelectedRows(allIds as string[]); // Example: Select all rows by their ids
+            setSelectedRows(allIds as string[]);
         } else {
             setSelectedRows([]);
         }
@@ -76,7 +75,7 @@ const OrderTable = ({ orders, loading }: OrderTableProps) => {
         event: React.ChangeEvent<HTMLInputElement>
     ) => {
         setRowsPerPage(parseInt(event.target.value, 10));
-        setPage(0); // Reset to the first page when changing rows per page
+        setPage(0);
     };
     const handleDeleteOrder = async () => {
         try {
@@ -190,7 +189,12 @@ const OrderTable = ({ orders, loading }: OrderTableProps) => {
                                 <CircularProgress size={40} sx={{ color: "#2563EB", my: 2 }} />
                             </TableCell>
                         </TableRow>
-                    ) : (
+                    ) : paginatedOrders.length < 1 ? (<Typography sx={{
+                        fontSize: '1rem',
+                        lineHeight: '150%',
+                        fontWeight: 600,
+                        padding: '20px'
+                    }}>No Data Available</Typography>) : (
                         paginatedOrders.map((order) => (
                             <TableRow key={order.id}>
                                 <TableCell>
@@ -204,17 +208,6 @@ const OrderTable = ({ orders, loading }: OrderTableProps) => {
                                             },
                                         }}
                                     />
-                                    {/* <Checkbox
-                                        checked={selectedRows.includes(order?.id as string)}
-                                        onChange={(e) => handleRowSelect(e, order.id as string)}
-                                        icon={<CheckBoxOutlineBlankIcon sx={{ borderRadius: '0.5rem', fill: '#E2E8F0', border: '1px solid #E2E8F0' }} />}
-                                        checkedIcon={<CheckBoxIcon sx={{ borderRadius: '0.5rem', fill: '#E2E8F0' }} />}
-                                        sx={{
-                                            '& .MuiSvgIcon-root': {
-                                                fontSize: 28,
-                                            },
-                                        }}
-                                    /> */}
                                 </TableCell>
                                 <TableCell
                                     sx={{
@@ -269,7 +262,7 @@ const OrderTable = ({ orders, loading }: OrderTableProps) => {
                                             if (user?.role === "ADMIN") {
                                                 setAnchorEl(e.currentTarget);
                                                 setSelectedOrder(order);
-                                                setMenuOpenId(order.id as string); // open menu for this specific row
+                                                setMenuOpenId(order.id as string);
                                             }
                                         }}
                                     >
@@ -304,7 +297,7 @@ const OrderTable = ({ orders, loading }: OrderTableProps) => {
             >
                 <MenuItem
                     onClick={() => {
-                        setOpenModal(true); // Open edit modal
+                        setOpenModal(true);
                         setAnchorEl(null);
                         setMenuOpenId(null);
                     }}

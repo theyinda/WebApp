@@ -1,7 +1,6 @@
-// components/DashboardCharts.js
 "use client";
 
-import { Box } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import {
     Chart as ChartJS,
     CategoryScale,
@@ -17,7 +16,7 @@ import { useRef } from "react";
 import CircularProgress from "@mui/material/CircularProgress";
 import { Doughnut, Line } from "react-chartjs-2";
 
-// Register necessary chart components
+
 ChartJS.register(
     CategoryScale,
     LinearScale,
@@ -29,56 +28,8 @@ ChartJS.register(
     Legend
 );
 
-// Plugin to scale hovered arc in place
-// const growHoverPlugin = {
-//     id: 'growHover',
-//     afterEvent(chart, args) {
-//         const { event } = args;
-//         const activeElement = chart.getElementsAtEventForMode(
-//             event,
-//             'nearest',
-//             { intersect: true },
-//             false
-//         );
 
-//         chart.data.datasets[0]._hoveredIndex = activeElement.length ? activeElement[0].index : null;
-//         chart.update();
-//     },
-//     beforeDatasetDraw(chart, args) {
-//         const { ctx, data } = chart;
-//         const dataset = data.datasets[args.index];
-//         const meta = chart.getDatasetMeta(args.index);
-
-//         if (!meta || !meta.data) return;
-
-//         const hoveredIndex = dataset._hoveredIndex;
-
-//         meta.data.forEach((arc, index) => {
-//             const scale = index === hoveredIndex ? 1.08 : 1;
-//             arc.outerRadius = arc.outerRadius * scale;
-//         });
-//     },
-// };
-
-// ChartJS.register(growHoverPlugin);
-
-// const centerTextPlugin = {
-//     id: 'centerText',
-//     beforeDraw: (chart) => {
-//         const { width, height, ctx } = chart;
-//         ctx.restore();
-//         const fontSize = (height / 150).toFixed(2);
-//         ctx.font = `bold ${fontSize * 16}px sans-serif`;
-//         ctx.textAlign = 'center';
-//         ctx.fillStyle = '#1E3A8A'; // blue color
-//         ctx.fillText('Total Orders', width / 2, height / 2 - 10);
-//         ctx.font = `bold ${fontSize * 18}px sans-serif`;
-//         ctx.fillText('10,000', width / 2, height / 2 + 15);
-//         ctx.save();
-//     }
-// };
-
-export default function DashboardCharts({ data }) {
+export default function DashboardCharts({ data, loading }) {
     const chartRef = useRef(null);
 
     const categoryTotals = {};
@@ -182,7 +133,7 @@ export default function DashboardCharts({ data }) {
                 callbacks: {
                     label: (context) => {
                         const value = context.parsed.y;
-                        return `$${value.toLocaleString()}`; // tooltip text
+                        return `$${value.toLocaleString()}`;
                     },
                 },
             },
@@ -218,7 +169,6 @@ export default function DashboardCharts({ data }) {
                     drawOnChartArea: true,
                     drawTicks: false,
                     drawBorder: false,
-
                     color: "#F1F5F9",
                 },
             },
@@ -232,7 +182,7 @@ export default function DashboardCharts({ data }) {
             },
         },
     };
-    // Pie chart config
+
     const pieData = {
         labels: uniqueCategories,
         datasets: [
@@ -240,7 +190,7 @@ export default function DashboardCharts({ data }) {
                 label: "Product Sales by Category",
                 data: categoryPrices,
                 backgroundColor,
-                // hoverOffset: 50, // Expands on hover
+                hoverOffset: 50, // Expands on hover
                 borderWidth: 2,
                 borderColor: "#fff",
             },
@@ -335,9 +285,14 @@ export default function DashboardCharts({ data }) {
                     borderRadius: "1rem",
                 }}
             >
-                {pieData.datasets.length < 1 ? (
+                {loading ? (
                     <CircularProgress size={40} sx={{ color: "#2563EB", my: 2 }} />
-                ) : (
+                ) : pieData.datasets[0].data.length < 1 ? (<Typography sx={{
+                    fontSize: '1rem',
+                    lineHeight: '150%',
+                    fontWeight: 600,
+                    padding: '20px'
+                }}>No Data Available</Typography>) : (
                     <Box
                         sx={{
                             display: "flex",

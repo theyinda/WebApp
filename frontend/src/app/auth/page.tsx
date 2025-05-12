@@ -69,7 +69,8 @@ const Index = () => {
                         padding: "1.5rem 0",
                     }}
                 >
-                    <Image src="/logo.png" width={139} height={50} alt="XYZ logo" />
+                    <Image src="/logo.png" width={70}
+                        height={29} alt="XYZ logo" />
                 </Box>
                 <Box sx={{ width: "100%", bgcolor: "background.paper" }}>
                     <Tabs
