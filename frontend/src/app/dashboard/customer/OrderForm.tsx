@@ -48,12 +48,10 @@ const validationSchema = Yup.object().shape({
 
 const OrderForm = ({ openModal, setOpenModal, handleModalClose, categories }: OrderProp) => {
     const user = useSelector((state: RootState) => state.auth.user);
-    console.log(user, user?.name, 'logged in user')
     const API = process.env.NEXT_PUBLIC_API_BASE_URL;
     const [loading, setLoading] = useState(false);
 
 
-    console.log(categories, 'categories')
     const uniqueCategories = [...new Set(categories)];
 
     const handleOrder = async (values: Order) => {

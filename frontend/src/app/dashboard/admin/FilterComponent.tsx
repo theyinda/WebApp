@@ -27,8 +27,6 @@ const FilterDropdown = ({ filter, setFilter }) => {
                 MenuProps={{
                     PaperProps: {
                         sx: {
-                            // backgroundColor: 'none',
-                            // color: 'white',
                             border: '1px solid #475569', borderRadius: '12px',
                         },
                     },

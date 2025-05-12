@@ -2,7 +2,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { Box, Typography } from "@mui/material";
-import Image from "next/image";
 import { Button } from "@mui/material";
 import { useSelector } from "react-redux";
 import { ErrorHandler } from "@/helper/Handler";
@@ -11,26 +10,19 @@ import OrderForm from "./OrderForm";
 import OrderTable from "../OrderTable";
 import { formattedDate } from "@/helper/date";
 import { Order } from "@/interfaces/order";
-
-// interface CustomerDashboardProps {
-//     orders: Order[];
-//     loading: boolean;
-//     totalOrders: Order[]
-// }
+import Header from "@/components/Header";
 
 const CustomerDashboard = () => {
     const [openModal, setOpenModal] = useState(false);
 
-
     const user = useSelector((state: RootState) => state.auth.user);
     const API = process.env.NEXT_PUBLIC_API_BASE_URL;
 
-    const [orders, setOrders] = useState<Order[]>([])
-    const [totalOrders, setTotalOrders] = useState<Order[]>([])
-    const [loading, setLoading] = useState<boolean>(false)
+    const [orders, setOrders] = useState<Order[]>([]);
+    const [totalOrders, setTotalOrders] = useState<Order[]>([]);
+    const [loading, setLoading] = useState<boolean>(false);
     const [filter] = useState("this_year");
-    console.log(user, 'userGod')
-    const userId = user?.id
+    const userId = user?.id;
 
     const handleModalClose = () => {
         setOpenModal(false);
@@ -38,83 +30,40 @@ const CustomerDashboard = () => {
 
     const fetchOrders = async () => {
         try {
-            setLoading(true)
+            setLoading(true);
             if (user?.id) {
                 const response = await fetch(`${API}/api/orders/?range=${filter}`, {
-                    method: 'GET',
-                    credentials: 'include',
+                    method: "GET",
+                    credentials: "include",
                     headers: {
-                        'Content-Type': 'application/json',
-                    }
-                })
+                        "Content-Type": "application/json",
+                    },
+                });
 
-                const data = await response.json()
-                console.log(data?.data, 'data')
-                console.log(user?.id, 'userId')
+                const data = await response.json();
 
                 const getUser = Array.isArray(data?.data)
                     ? data?.data.filter((order: Order) => order?.customerId === userId)
                     : [];
-                setTotalOrders(data?.data)
+                setTotalOrders(data?.data);
 
                 setOrders(getUser);
             }
-
         } catch (error) {
-            console.log(error, 'error')
+            console.log(error, "error");
             ErrorHandler({ message: "Error Fetching Orders" });
         } finally {
-            setLoading(false)
+            setLoading(false);
         }
-
-    }
-
-    console.log(user, 'user-dashboard')
-
+    };
 
     useEffect(() => {
-        fetchOrders()
-
-    }, [userId])
+        fetchOrders();
+    }, [userId]);
 
     return (
-        <Box sx={{ padding: "0!important", margin: "0!imporant" }}>
-            <Box
-                sx={{
-                    display: "flex",
-                    justifyContent: "flex-end",
-                    alignItems: "center",
-                    background: "#fff",
-                    pr: "3rem",
-                }}
-            >
-                <Box sx={{ display: "flex", gap: "1rem", alignItems: "center" }}>
-                    <Box sx={{ maxWidth: "40px" }}>
-                        <Image
-                            src={"/notification.png"}
-                            width={16}
-                            height={18}
-                            alt="profile"
-                            style={{ width: "100%" }}
-                        />
-                    </Box>
-
-                    <Image
-                        src={"/profile.png"}
-                        width={48}
-                        height={48}
-                        alt="profile"
-                        style={{ borderRadius: "50%" }}
-                    />
-                    <Image
-                        src={"/arrow.png"}
-                        width={8}
-                        height={4}
-                        alt="profile"
-                    // style={{ borderRadius: '50%' }}
-                    />
-                </Box>
-            </Box>
+        <Box>
+            <Header />
             <Box
                 sx={{
                     margin: "2rem",
@@ -183,7 +132,6 @@ const CustomerDashboard = () => {
                             Create an Order
                         </Button>
                     )}
-
                 </Box>
 
                 <Box>

@@ -78,16 +78,11 @@ const Register = () => {
                 SuccessHandler({
                     message: "Registration successful!",
                 });
-                console.log(data, 'data')
+
                 router.push("/dashboard");
-                // if (data.user.role === "ADMIN") {
-                //     router.push("/dashboard/admin");
-                // } else {
-                //     router.push("/dashboard/customer");
-                // }
             } else {
                 const errorData = await res.json();
-                console.log(errorData, 'error')
+                console.log(errorData, "error");
                 ErrorHandler({
                     message: errorData.message || "Registration failed.",
                 });

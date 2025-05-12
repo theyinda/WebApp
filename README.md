@@ -133,3 +133,5 @@ To test the admin dashboard without registering:
 "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
 "exclude": ["node_modules"]
 }
+
+ const categoryPrices = Object.values(categoryTotals);

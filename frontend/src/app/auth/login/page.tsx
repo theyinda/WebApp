@@ -34,7 +34,6 @@ const Login = () => {
     };
     const API = process.env.NEXT_PUBLIC_API_BASE_URL;
 
-
     const handleLogin = async (values: User) => {
         try {
             setLoading(true);
@@ -47,35 +46,28 @@ const Login = () => {
                     password: values.password,
                 }),
             });
-            console.log(res, 'res')
 
             if (res.ok) {
                 const data = await res.json();
                 dispatch(setUser(data.user));
-                localStorage.setItem('user', JSON.stringify(data.user));
-                console.log('User stored in localStorage:', localStorage.getItem('user'));
+                localStorage.setItem("user", JSON.stringify(data.user));
+                console.log(
+                    "User stored in localStorage:",
+                    localStorage.getItem("user")
+                );
                 SuccessHandler({
                     message: "Login successful!",
                 });
-                console.log(data, 'data')
                 router.push("/dashboard");
-
-                // if (data.user.role === "ADMIN") {
-                //     router.push("/dashboard/admin");
-                // } else {
-                //     router.push("/dashboard/customer");
-                // }
             } else if (res.status === 401) {
                 ErrorHandler({
                     message: "User not found or Invalid credentials",
                 });
-            }
-            else {
+            } else {
                 ErrorHandler({
                     message: "Login Unsuccessful, please check your details",
                 });
             }
-
         } catch (error) {
             console.error("Error:", error);
         } finally {
@@ -129,9 +121,7 @@ const Login = () => {
                             placeholder="Enter your password"
                             endadornment={
                                 <InputAdornment position="end">
-                                    <IconButton
-                                        onClick={handleToggleCurrentPasswordVisibility}
-                                    >
+                                    <IconButton onClick={handleToggleCurrentPasswordVisibility}>
                                         {showCurrentPassword ? (
                                             <VisibilityIcon />
                                         ) : (
@@ -161,9 +151,11 @@ const Login = () => {
                                     fontSize: "1rem",
                                     borderRadius: "0.5rem",
                                     width: "100%",
-                                    background: '#408CFF'
+                                    background: "#408CFF",
                                 }}
-                            >Login</Button>
+                            >
+                                Login
+                            </Button>
                         </Box>
                     </Box>
                 </Form>

@@ -49,18 +49,15 @@ const validationSchema = Yup.object().shape({
 
 const EditOrderForm = ({ openModal, setOpenModal, handleModalClose, categories, selectedOrder }: OrderProp) => {
     const user = useSelector((state: RootState) => state.auth.user);
-    console.log(user, user?.name, 'logged in user')
     const API = process.env.NEXT_PUBLIC_API_BASE_URL;
     const [loading, setLoading] = useState(false);
 
-    console.log(categories, 'categories', categories.length, selectedOrder)
-    // const uniqueCategories = [...new Set(categories)];
+
     const uniqueCategories = [
         ...new Map(
             categories.map(item => [item.productCategory, { productCategory: item.productCategory }])
         ).values()
     ];
-    console.log(uniqueCategories, 'uniqueCategories', uniqueCategories.length, selectedOrder)
 
     const handleOrder = async (values: Order) => {
         try {
@@ -293,13 +290,13 @@ const EditOrderForm = ({ openModal, setOpenModal, handleModalClose, categories, 
                                             textField: {
                                                 sx: {
                                                     "& .MuiInputBase-input": {
-                                                        padding: "6px 10px !important", // Adjust vertical and horizontal padding
+                                                        padding: "6px 10px !important",
                                                     },
                                                     "& .MuiPickersSectionList-root": {
-                                                        padding: "7px 8px", // Customize as needed
+                                                        padding: "7px 8px",
                                                     },
                                                     "& .MuiOutlinedInput-root": {
-                                                        borderRadius: "8px", // Optional: adjust border radius
+                                                        borderRadius: "8px",
                                                     },
                                                 },
                                             },

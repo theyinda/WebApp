@@ -4,12 +4,8 @@ import { Box } from "@mui/material";
 import Image from "next/image";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
-
 import Login from "./login/page";
-
 import Register from "./register/page";
-
-
 
 interface TabPanelProps {
     children?: React.ReactNode;
@@ -45,10 +41,6 @@ const Index = () => {
         setValue(newValue);
     };
 
-
-
-
-
     return (
         <Box
             sx={{
@@ -58,7 +50,6 @@ const Index = () => {
                 paddingX: { xs: "1rem", lg: "3rem" },
             }}
         >
-
             <Box
                 sx={{
                     boxShadow: " 0px 20px 25px 0px #0000001A",
@@ -78,12 +69,7 @@ const Index = () => {
                         padding: "1.5rem 0",
                     }}
                 >
-                    <Image
-                        src="/logo.png"
-                        width={139}
-                        height={50}
-                        alt="XYZ logo"
-                    />
+                    <Image src="/logo.png" width={139} height={50} alt="XYZ logo" />
                 </Box>
                 <Box sx={{ width: "100%", bgcolor: "background.paper" }}>
                     <Tabs
@@ -98,7 +84,6 @@ const Index = () => {
                                 color: "#6B7280",
                                 "&.Mui-selected": {
                                     color: "#408CFF",
-
                                 },
                             },
                         }}
@@ -113,13 +98,9 @@ const Index = () => {
                     <CustomTabPanel value={value} index={1}>
                         <Login />
                     </CustomTabPanel>
-
-
                 </Box>
             </Box>
-
-
-        </Box >
+        </Box>
     );
 };
 

@@ -1,8 +1,8 @@
 "use client";
 import React from "react";
 import { Box, Typography, Chip, Divider } from "@mui/material";
-import NorthIcon from '@mui/icons-material/North';
-import SouthIcon from '@mui/icons-material/South';
+import NorthIcon from "@mui/icons-material/North";
+import SouthIcon from "@mui/icons-material/South";
 
 interface Metric {
     label: string;
@@ -15,25 +15,29 @@ interface DashboardCardProps {
 }
 
 const DashboardCard = ({ data }: DashboardCardProps) => {
-    //   const theme = useTheme();
-
     const getChip = (percent: number) => {
         const isPositive = percent >= 0;
         return (
             <Chip
                 label={`${Math.abs(percent)}%`}
-                icon={isPositive ? <NorthIcon sx={{ color: '#24D164 !important', fontSize: '1rem' }} /> : <SouthIcon sx={{ color: '#ED4F9D !important', fontSize: 'small' }} />}
+                icon={
+                    isPositive ? (
+                        <NorthIcon sx={{ color: "#24D164 !important", fontSize: "1rem" }} />
+                    ) : (
+                        <SouthIcon
+                            sx={{ color: "#ED4F9D !important", fontSize: "small" }}
+                        />
+                    )
+                }
                 sx={{
                     backgroundColor: isPositive ? "#F0FDF4" : "#FDF2F8",
                     color: isPositive ? "#24D164" : "#ED4F9D",
                     fontWeight: 600,
-                    height: '24px',
-                    fontSize: '0.75rem',
+                    height: "24px",
+                    fontSize: "0.75rem",
                     "& .MuiChip-icon": {
-                        fontSize: '12px',
-                    }
-
-
+                        fontSize: "12px",
+                    },
                 }}
                 size="small"
             />
@@ -51,7 +55,7 @@ const DashboardCard = ({ data }: DashboardCardProps) => {
                 justifyContent: "space-between",
                 alignItems: "center",
                 flexDirection: { xs: "column", md: "row" },
-                gap: { xs: "1rem", md: "0" },
+                gap: { xs: "1.5rem", md: "0" },
             }}
         >
             {data?.map((item, index) => (
@@ -59,9 +63,12 @@ const DashboardCard = ({ data }: DashboardCardProps) => {
                     {index > 0 && (
                         <Divider
                             orientation="vertical"
-
                             flexItem
-                            sx={{ display: { xs: "none", md: "block" }, mx: 3, color: '#E2E8F0' }}
+                            sx={{
+                                display: { xs: "none", md: "block" },
+                                mx: 3,
+                                color: "#E2E8F0",
+                            }}
                         />
                     )}
                     <Box sx={{ textAlign: { xs: "center", md: "left" } }}>
@@ -76,7 +83,14 @@ const DashboardCard = ({ data }: DashboardCardProps) => {
                         >
                             {item.label}
                         </Typography>
-                        <Box sx={{ display: "flex", alignItems: "center", justifyContent: { xs: "center", md: "start" }, gap: "0.5rem" }}>
+                        <Box
+                            sx={{
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: { xs: "center", md: "start" },
+                                gap: "0.5rem",
+                            }}
+                        >
                             <Typography
                                 sx={{
                                     fontSize: "1.25rem",

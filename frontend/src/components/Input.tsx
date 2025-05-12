@@ -25,13 +25,6 @@ const StyledTextField = styled(TextField)(({ error }) => ({
 
     border: error ? 'none' : '1px solid #E0E2E7',
     borderRadius: '0.5rem',
-    // maxWidth: '400px',
-    // "& .MuiOutlinedInput-root": {
-    //     borderRadius: '8px',
-    // },
-    // "& .MuiOutlinedInput-root": {
-    //     borderRadius: '8px',
-    // },
     "& .MuiInputBase-input": {
         fontWeight: 400,
         fontSize: '1rem',

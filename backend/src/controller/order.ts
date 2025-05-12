@@ -17,8 +17,6 @@ interface AuthenticatedRequest extends Request {
     };
 }
 
-
-
 export const createOrder = async (req: Request, res: Response) => {
     const { user } = req as AuthenticatedRequest;
     const token = req.cookies.token;
@@ -31,11 +29,8 @@ export const createOrder = async (req: Request, res: Response) => {
             return res.status(400).json({ error: "User not authenticated" });
         }
 
-        const customerName = user.name;
-
         const order = await prisma.order.create({
             data: {
-                // customer: user.name,
                 productName,
                 productCategory,
                 price: parseFloat(price),
@@ -50,11 +45,8 @@ export const createOrder = async (req: Request, res: Response) => {
     }
 };
 
-// Get All Orders (Admin only)
 export const getAllOrders = async (req: Request, res: Response) => {
     const token = req.cookies.token;
-
-    console.log(token, "token get orders");
 
     if (!token) return res.status(401).json({ message: "Unauthorized" });
     try {
@@ -113,8 +105,6 @@ export const getAllOrders = async (req: Request, res: Response) => {
 export const updateOrder = async (req: Request, res: Response) => {
     const token = req.cookies.token;
 
-    console.log(token, "token create orders");
-
     if (!token) return res.status(401).json({ message: "Unauthorized" });
     const { id } = req.params;
     const { productName, productCategory, price, orderDate } = req.body;
@@ -133,8 +123,6 @@ export const updateOrder = async (req: Request, res: Response) => {
 
 export const deleteOrder = async (req: Request, res: Response) => {
     const token = req.cookies.token;
-
-    console.log(token, "token create orders");
 
     if (!token) return res.status(401).json({ message: "Unauthorized" });
     const { id } = req.params;

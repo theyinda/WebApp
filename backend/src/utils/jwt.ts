@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
 
-dotenv.config(); // To load environment variables
+dotenv.config();
 
 const JWT_SECRET = process.env.JWT_SECRET || '';
 

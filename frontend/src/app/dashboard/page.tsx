@@ -1,4 +1,3 @@
-
 "use client";
 import { Box } from "@mui/material";
 import React from "react";
@@ -7,21 +6,12 @@ import CustomerDashboard from "./customer/page";
 import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
 
-
 const Dashboard = () => {
-
-
-    const user = useSelector((state: RootState) => state.auth.user)
-
+    const user = useSelector((state: RootState) => state.auth.user);
 
     return (
-        <Box
-            sx={{ padding: {}, backgroundColor: "" }}
-        >
-
-            {user?.role === 'ADMIN' ? (<AdminDashboard />) : (<CustomerDashboard />)}
-
-
+        <Box>
+            {user?.role === "ADMIN" ? <AdminDashboard /> : <CustomerDashboard />}
         </Box>
     );
 };

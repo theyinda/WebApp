@@ -1,10 +1,12 @@
 "use client";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
     Box,
     Drawer,
     List,
-
+    BottomNavigation,
+    BottomNavigationAction,
+    Paper,
 } from "@mui/material";
 import Image from "next/image";
 import { DashboardNav } from "@/constants/navigation";
@@ -23,61 +25,58 @@ export default function DashboardRouteLayout({
     const router = useRouter();
     const pathname = usePathname();
     const API = process.env.NEXT_PUBLIC_API_BASE_URL;
-    // const [profileOpen, setProfileOpen] = useState(false);
-    // const [mobileNav, setMobileNav] = useState(0);
+    const [profileOpen, setProfileOpen] = useState(false);
+    const [mobileNav, setMobileNav] = useState(0);
 
-    // const [isMobile, setIsMobile] = useState(false);
+    const [isMobile, setIsMobile] = useState(false);
 
-    // useEffect(() => {
-    //     if (typeof window !== "undefined") {
-    //         const handleResize = () => {
-    //             // setIsMobile(window.innerWidth <= 600);
+    useEffect(() => {
+        if (typeof window !== "undefined") {
+            const handleResize = () => {
+                // setIsMobile(window.innerWidth <= 600);
 
-    //             if (window.innerWidth > 600 && pathname === "/profile") {
-    //                 router.push("/profile/info");
-    //                 setProfileOpen(true);
-    //             }
-    //         };
+                if (window.innerWidth > 600 && pathname === "/profile") {
+                    router.push("/profile/info");
+                    setProfileOpen(true);
+                }
+            };
 
-    //         setIsMobile(window.innerWidth <= 600);
-    //         if (pathname.startsWith("/profile")) {
-    //             setProfileOpen(true);
-    //         }
+            setIsMobile(window.innerWidth <= 600);
+            if (pathname.startsWith("/profile")) {
+                setProfileOpen(true);
+            }
 
-    //         window.addEventListener("resize", handleResize);
+            window.addEventListener("resize", handleResize);
 
-    //         return () => window.removeEventListener("resize", handleResize);
-    //     }
-    // }, [pathname, router]);
+            return () => window.removeEventListener("resize", handleResize);
+        }
+    }, [pathname, router]);
 
-    // const handleMenuClick = (title: string, route: string) => {
-    //     if (title === "Profile") {
-    //         if (isMobile) {
-    //             router.push("/profile");
-    //         } else {
-    //             router.push("/profile/info");
-    //             setProfileOpen(!profileOpen);
-    //         }
-    //     } else {
-    //         router.push(route);
-    //     }
-    // };
+    const handleMenuClick = (title: string, route: string) => {
+        if (title === "Profile") {
+            if (isMobile) {
+                router.push("/profile");
+            } else {
+                router.push("/profile/info");
+                setProfileOpen(!profileOpen);
+            }
+        } else {
+            router.push(route);
+        }
+    };
 
     const handleLogout = async () => {
-        console.log('logout')
         try {
             const response = await fetch(`${API}/api/auth/logout`, {
                 method: 'POST',
-                credentials: 'include', // important to send cookies
+                credentials: 'include',
                 headers: {
                     'Content-Type': 'application/json',
                 },
             });
 
             if (response.ok) {
-                // Optionally remove frontend stored state (e.g., Redux, Context, localStorage)
                 localStorage.removeItem('user');
-                // window.location.href = '/login'; // Redirect to login page
                 router.push("/");
             } else {
                 console.error('Logout failed:', await response.json());
@@ -119,8 +118,8 @@ export default function DashboardRouteLayout({
                     >
                         <Image
                             src="/logo.png"
-                            width={120}
-                            height={50}
+                            width={70}
+                            height={29}
                             alt="XYZ logo"
                             onClick={() => router.push("/")}
                             style={{
@@ -188,7 +187,45 @@ export default function DashboardRouteLayout({
             >
                 {children}
             </Box>
-
+            {/* {(pathname === "/profile" || !pathname?.match("/profile/*")) && ( */}
+            <Paper
+                sx={{
+                    display: { xs: "block", sm: "none" },
+                    position: "fixed",
+                    bottom: 0,
+                    left: 0,
+                    right: 0,
+                    width: "100%",
+                    zIndex: 1000,
+                }}
+                elevation={1}
+            >
+                <BottomNavigation
+                    value={mobileNav}
+                    onChange={(_, newValue) => setMobileNav(newValue)}
+                    showLabels
+                >
+                    {DashboardNav.map((item) => (
+                        <BottomNavigationAction
+                            sx={{
+                                color:
+                                    pathname === item.route
+                                        ? 'red'
+                                        : "#4b5563 !important",
+                                "& .MuiBottomNavigationAction-label": {
+                                    fontSize: "11px",
+                                    margin: 0,
+                                },
+                            }}
+                            key={item.title}
+                            label={item.title}
+                            icon={item.icon.default}
+                            onClick={() => handleMenuClick(item.title, item.route)}
+                        />
+                    ))}
+                </BottomNavigation>
+            </Paper>
+            {/* )} */}
 
         </Box>
     );

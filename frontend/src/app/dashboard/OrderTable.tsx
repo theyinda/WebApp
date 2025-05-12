@@ -1,13 +1,23 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import {
-    Box, Menu,
+    Box,
+    Menu,
     MenuItem,
     IconButton,
-    TablePagination
+    TablePagination,
 } from "@mui/material";
-import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
-import { Table, TableBody, TableCell, TableHead, TableRow, Checkbox } from "@mui/material";
+import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableRow,
+    Checkbox,
+} from "@mui/material";
+// import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
+// import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
 import { Order } from "@/interfaces/order";
@@ -31,21 +41,23 @@ const OrderTable = ({ orders, loading }: OrderTableProps) => {
     const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
     const [menuOpenId, setMenuOpenId] = useState<string | null>(null);
 
-
     const handleSelectAllRows = (event: React.ChangeEvent<HTMLInputElement>) => {
         if (event.target.checked) {
-            const allIds = orders.map(order => order.id);
+            const allIds = orders.map((order) => order.id);
             setSelectedRows(allIds as string[]); // Example: Select all rows by their ids
         } else {
             setSelectedRows([]);
         }
     };
 
-    const handleRowSelect = (event: React.ChangeEvent<HTMLInputElement>, rowId: string) => {
+    const handleRowSelect = (
+        event: React.ChangeEvent<HTMLInputElement>,
+        rowId: string
+    ) => {
         if (event.target.checked) {
             setSelectedRows([...selectedRows, rowId]);
         } else {
-            setSelectedRows(selectedRows.filter(id => id !== rowId));
+            setSelectedRows(selectedRows.filter((id) => id !== rowId));
         }
     };
 
@@ -53,44 +65,42 @@ const OrderTable = ({ orders, loading }: OrderTableProps) => {
         setOpenModal(false);
     };
 
-    const handleChangePage = (event: React.MouseEvent<HTMLButtonElement> | null, newPage: number) => {
+    const handleChangePage = (
+        event: React.MouseEvent<HTMLButtonElement> | null,
+        newPage: number
+    ) => {
         setPage(newPage);
     };
 
-    const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const handleChangeRowsPerPage = (
+        event: React.ChangeEvent<HTMLInputElement>
+    ) => {
         setRowsPerPage(parseInt(event.target.value, 10));
         setPage(0); // Reset to the first page when changing rows per page
     };
     const handleDeleteOrder = async () => {
         try {
-
-
             const res = await fetch(`${API}/api/orders/${selectedOrder?.id}`, {
                 method: "DELETE",
-                credentials: 'include',
+                credentials: "include",
                 headers: { "Content-Type": "application/json" },
-
             });
 
             if (res.ok) {
-
                 SuccessHandler({
                     message: "Order Deleted Successfully!",
                 });
                 setOpenModal(false);
-
-
-
             } else {
                 const errorData = await res.json();
-                console.log(errorData, 'error')
+                console.log(errorData, "error");
                 ErrorHandler({
                     message: errorData.message || "Could not delete order.",
                 });
             }
         } catch (error) {
             console.error("Error:", error);
-            console.log(error, 'error')
+            console.log(error, "error");
             ErrorHandler({ message: "Could not delete order" });
         }
     };
@@ -100,12 +110,12 @@ const OrderTable = ({ orders, loading }: OrderTableProps) => {
         return dateB - dateA;
     });
 
-
-
-    const paginatedOrders = sortedOrders?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage) || [];
+    const paginatedOrders =
+        sortedOrders?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage) ||
+        [];
 
     const getCustomerName = (customerId: string) => {
-        const customer = customers.find(c => c.id === customerId);
+        const customer = customers.find((c) => c.id === customerId);
         return customer ? customer.name : "N/A";
     };
 
@@ -118,33 +128,59 @@ const OrderTable = ({ orders, loading }: OrderTableProps) => {
                 });
                 const data = await response.json();
 
-
                 if (!response.ok) {
                     throw new Error(data.message || "Failed to fetch customers");
                 }
-                setCustomers(data)
+                setCustomers(data);
             } catch (error) {
                 console.error("Error fetching customers:", error);
             }
-        }
+        };
         fetchCustomers();
     }, []);
 
-
     return (
-        <Box>
-            <Table sx={{ mt: '2rem' }}>
-                <TableHead sx={{ background: '#F8FAFC' }}>
+        <Box sx={{ overflowX: "auto" }}>
+            <Table sx={{ mt: "2rem", minWidth: "800px" }}>
+                <TableHead sx={{ background: "#F8FAFC" }}>
                     <TableRow>
                         <TableCell>
-                            <Checkbox onChange={handleSelectAllRows} />
+                            <Checkbox onChange={handleSelectAllRows} sx={{
+                                '& .MuiSvgIcon-root': {
+                                    fill: '#E2E8F0',
+                                },
+                            }} />
                         </TableCell>
-                        <TableCell sx={{ fontSize: '0.75rem', fontWeight: 500, color: '#64748B' }}>Customer Name</TableCell>
-                        <TableCell sx={{ fontSize: '0.75rem', fontWeight: 500, color: '#64748B' }}>Product Name</TableCell>
-                        <TableCell sx={{ fontSize: '0.75rem', fontWeight: 500, color: '#64748B' }}>Category</TableCell>
-                        <TableCell sx={{ fontSize: '0.75rem', fontWeight: 500, color: '#64748B' }}>Date</TableCell>
-                        <TableCell sx={{ fontSize: '0.75rem', fontWeight: 500, color: '#64748B' }}>Price</TableCell>
-                        <TableCell sx={{ fontSize: '0.75rem', fontWeight: 500, color: '#64748B' }}><MoreHorizIcon sx={{ color: '#64748B' }} /></TableCell>
+                        <TableCell
+                            sx={{ fontSize: "0.75rem", fontWeight: 500, color: "#64748B" }}
+                        >
+                            Customer Name
+                        </TableCell>
+                        <TableCell
+                            sx={{ fontSize: "0.75rem", fontWeight: 500, color: "#64748B" }}
+                        >
+                            Product Name
+                        </TableCell>
+                        <TableCell
+                            sx={{ fontSize: "0.75rem", fontWeight: 500, color: "#64748B" }}
+                        >
+                            Category
+                        </TableCell>
+                        <TableCell
+                            sx={{ fontSize: "0.75rem", fontWeight: 500, color: "#64748B" }}
+                        >
+                            Date
+                        </TableCell>
+                        <TableCell
+                            sx={{ fontSize: "0.75rem", fontWeight: 500, color: "#64748B" }}
+                        >
+                            Price
+                        </TableCell>
+                        <TableCell
+                            sx={{ fontSize: "0.75rem", fontWeight: 500, color: "#64748B" }}
+                        >
+                            <MoreHorizIcon sx={{ color: "#64748B" }} />
+                        </TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
@@ -155,43 +191,91 @@ const OrderTable = ({ orders, loading }: OrderTableProps) => {
                             </TableCell>
                         </TableRow>
                     ) : (
-                        paginatedOrders.map(order => (
-
+                        paginatedOrders.map((order) => (
                             <TableRow key={order.id}>
                                 <TableCell>
+
                                     <Checkbox
                                         checked={selectedRows.includes(order?.id as string)}
                                         onChange={(e) => handleRowSelect(e, order.id as string)}
+                                        sx={{
+                                            '& .MuiSvgIcon-root': {
+                                                fill: '#E2E8F0',
+                                            },
+                                        }}
                                     />
+                                    {/* <Checkbox
+                                        checked={selectedRows.includes(order?.id as string)}
+                                        onChange={(e) => handleRowSelect(e, order.id as string)}
+                                        icon={<CheckBoxOutlineBlankIcon sx={{ borderRadius: '0.5rem', fill: '#E2E8F0', border: '1px solid #E2E8F0' }} />}
+                                        checkedIcon={<CheckBoxIcon sx={{ borderRadius: '0.5rem', fill: '#E2E8F0' }} />}
+                                        sx={{
+                                            '& .MuiSvgIcon-root': {
+                                                fontSize: 28,
+                                            },
+                                        }}
+                                    /> */}
                                 </TableCell>
-                                <TableCell sx={{ fontSize: '0.75rem', fontWeight: 600, color: '#0F172A' }}>
-                                    {user?.role === 'ADMIN' ? getCustomerName(order?.customerId) : user?.name}
+                                <TableCell
+                                    sx={{
+                                        fontSize: "0.75rem",
+                                        fontWeight: 600,
+                                        color: "#0F172A",
+                                    }}
+                                >
+                                    {user?.role === "ADMIN"
+                                        ? getCustomerName(order?.customerId)
+                                        : user?.name}
                                 </TableCell>
-                                <TableCell sx={{ fontSize: '0.75rem', fontWeight: 600, color: '#0F172A' }}>
+                                <TableCell
+                                    sx={{
+                                        fontSize: "0.75rem",
+                                        fontWeight: 600,
+                                        color: "#0F172A",
+                                    }}
+                                >
                                     {order.productName}
                                 </TableCell>
-                                <TableCell sx={{ fontSize: '0.75rem', fontWeight: 600, color: '#0F172A' }}>
+                                <TableCell
+                                    sx={{
+                                        fontSize: "0.75rem",
+                                        fontWeight: 600,
+                                        color: "#0F172A",
+                                    }}
+                                >
                                     {order.productCategory}
                                 </TableCell>
-                                <TableCell sx={{ fontSize: '0.75rem', fontWeight: 600, color: '#0F172A' }}>
+                                <TableCell
+                                    sx={{
+                                        fontSize: "0.75rem",
+                                        fontWeight: 600,
+                                        color: "#0F172A",
+                                    }}
+                                >
                                     {new Date(order.orderDate).toLocaleDateString("en-GB")}
                                 </TableCell>
-                                <TableCell sx={{ fontSize: '0.75rem', fontWeight: 600, color: '#0F172A' }}>
+                                <TableCell
+                                    sx={{
+                                        fontSize: "0.75rem",
+                                        fontWeight: 600,
+                                        color: "#0F172A",
+                                    }}
+                                >
                                     {order.price}
                                 </TableCell>
                                 <TableCell>
-
                                     <IconButton
                                         onClick={(e) => {
-                                            if (user?.role === 'ADMIN') {
+                                            if (user?.role === "ADMIN") {
                                                 setAnchorEl(e.currentTarget);
                                                 setSelectedOrder(order);
                                                 setMenuOpenId(order.id as string); // open menu for this specific row
                                             }
-
                                         }}
                                     >
-                                        <MoreHorizIcon sx={{ color: '#64748B', cursor: 'pointer', }} />
+                                        <MoreHorizIcon
+                                            sx={{ color: "#64748B", cursor: "pointer" }}
+                                        />
                                     </IconButton>
                                 </TableCell>
                             </TableRow>
@@ -229,17 +313,22 @@ const OrderTable = ({ orders, loading }: OrderTableProps) => {
                 </MenuItem>
                 <MenuItem
                     onClick={() => {
-                        handleDeleteOrder()
+                        handleDeleteOrder();
                         setAnchorEl(null);
                         setMenuOpenId(null);
-
                     }}
                 >
                     Delete
                 </MenuItem>
             </Menu>
 
-            <EditOrderForm openModal={openModal} setOpenModal={setOpenModal} handleModalClose={handleModalClose} categories={orders} selectedOrder={selectedOrder} />
+            <EditOrderForm
+                openModal={openModal}
+                setOpenModal={setOpenModal}
+                handleModalClose={handleModalClose}
+                categories={orders}
+                selectedOrder={selectedOrder}
+            />
         </Box>
     );
 };

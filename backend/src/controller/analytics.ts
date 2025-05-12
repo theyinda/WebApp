@@ -2,13 +2,11 @@ import { Request, Response } from 'express';
 import prisma from '../config/db';
 import { startOfMonth, endOfMonth, startOfYear, endOfYear, subMonths, subYears } from "date-fns";
 
-// Admin only
-// Total Revenue
+
 export const analytics = async (req: Request, res: Response) => {
-    // const PORT = process.env.PORT || 8000;
+
     const token = req.cookies.token;
 
-    console.log(token, 'token get orders')
 
     if (!token) return res.status(401).json({ message: 'Unauthorized' });
     try {
@@ -19,7 +17,6 @@ export const analytics = async (req: Request, res: Response) => {
 
         const now = new Date();
 
-        // Set date range based on filter
         switch (range) {
             case "this_month":
                 startDate = startOfMonth(now);
@@ -40,12 +37,10 @@ export const analytics = async (req: Request, res: Response) => {
                 endDate = endOfYear(lastYear);
                 break;
             default:
-                // If no filter or unknown filter, return all-time data
                 startDate = undefined;
                 endDate = undefined;
         }
 
-        // Build the filter for Prisma query
         const dateFilter = startDate && endDate ? {
             createdAt: {
                 gte: startDate,
@@ -53,7 +48,6 @@ export const analytics = async (req: Request, res: Response) => {
             }
         } : {};
 
-        // Revenue
         const revenue = await prisma.order.aggregate({
             _sum: {
                 price: true,
@@ -61,12 +55,11 @@ export const analytics = async (req: Request, res: Response) => {
             where: dateFilter
         });
 
-        // Orders Count
+
         const orderCount = await prisma.order.count({
             where: dateFilter
         });
 
-        // Unique Customers
         const customers = await prisma.user.findMany({
             where: dateFilter,
             select: {

@@ -7,7 +7,6 @@ export default function Home() {
       <Box
         sx={{
           marginTop: "5.5rem",
-          // marginBottom: { xs: "35rem", lg: "25rem" },
           position: "relative",
         }}
       >
